@@ -1,4 +1,9 @@
+"use client";
+import { useRouter } from "next/navigation";
+
 export default function Path() {
+    const router = useRouter()
+
     const levels = [
         {id: 1, unlocked: true},
         {id: 2, unlocked: false}
@@ -8,7 +13,7 @@ export default function Path() {
         <div>
             <p>Path component</p>
             {levels.map(level => (
-                <p>{level.id}</p>
+                <p key={level.id} onClick={() => router.push(`/board/level-${level.id}`)}>⭐ Nivel {level.id}</p>
             ))}
         </div>
         
