@@ -13,7 +13,11 @@ export default function Path() {
         <div>
             <p>Path component</p>
             {levels.map(level => (
-                <p key={level.id} onClick={() => router.push(`/board/level-${level.id}`)}>⭐ Nivel {level.id}</p>
+               level.unlocked && <p key={level.id}
+               onClick={() => router.push(`board/level-${level.id}`)}
+               >
+                {level.id}
+                </p>
             ))}
         </div>
         
