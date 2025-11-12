@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Chessboard, PieceDropHandlerArgs } from "react-chessboard";
-import { Chess } from "chess.js"; // 👈 clave para evitar el error de import
+import { Chess } from "chess.js"; 
 
 export default function Board() {
   // crear una instancia persistente del juego
@@ -57,29 +57,13 @@ export default function Board() {
     position: chessPosition,
     onPieceDrop,
     id: "animation-duration-in-ms",
+    boardWidth: 5,
   };
 
   // renderizado
   return (
-    <div className="flex flex-col items-center gap-4 mt-6">
-      <label className="flex items-center gap-4">
-        Animation duration (ms):
-        <input
-          type="range"
-          min="0"
-          max="1000"
-          step="50"
-          value={animationDuration}
-          onChange={(e) => setAnimationDuration(Number(e.target.value))}
-        />
-        {animationDuration}ms
-      </label>
-
+    <div style={{ width: '300px' }}>
       <Chessboard options={chessboardOptions} />
-
-      <p className="text-sm text-gray-500">
-        Play against random moves. Try moving pieces to see the animation effect.
-      </p>
-    </div>
+    </div>    
   );
 }
