@@ -5,28 +5,53 @@ import { Chessboard, PieceDropHandlerArgs } from "react-chessboard";
 import { Chess } from "chess.js"; 
 
 export default function Board() {
-  // crear una instancia persistente del juego
+  // Create a persistent instance of the chess game using a ref
   const chessRef = useRef(new Chess());
   const chess = chessRef.current;
 
-  // estados de posición y animación
+  // State to control animation duration and current board position
   const [animationDuration, setAnimationDuration] = useState(300);
   const [chessPosition, setChessPosition] = useState(chess.fen());
 
-  // función para hacer un movimiento aleatorio (CPU)
-  function makeRandomMove() {
-    const possibleMoves = chess.moves();
+  // Function to fetch the best move from the Stockfish API
+  const getBestMoveFromAPI = async (fen: string): Promise<string | null> => {
+    try {
+      const response = await fetch("https://chess-api.com/v1", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fen,               // current board position in FEN format
+          depth: 12,         // search depth
+          variants: 1,       // number of best moves to return
+          maxThinkingTime: 50 // max time in ms for engine to think
+        }),
+      });
 
-    if (chess.isGameOver() || possibleMoves.length === 0) return;
+      const data = await response.json();
+      return data.move || null; // return the best move or null if not found
+    } catch (error) {
+      console.error("Error fetching move from Stockfish API:", error);
+      return null;
+    }
+  };
 
-    const randomMove =
-      possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+  // Function to apply the best move from the engine to the board
+  const makeBestMove = async () => {
+    if (chess.isGameOver()) return; // do nothing if the game is over
 
-    chess.move(randomMove);
-    setChessPosition(chess.fen());
-  }
+    const bestMove = await getBestMoveFromAPI(chess.fen());
 
-  // manejar el evento de arrastrar y soltar
+    if (!bestMove) return;
+
+    try {
+      chess.move(bestMove); // apply the move
+      setChessPosition(chess.fen()); // update board position
+    } catch (error) {
+      console.error("Error applying engine move:", error);
+    }
+  };
+
+  // Handle piece drop event from the user
   const onPieceDrop = ({
     sourceSquare,
     targetSquare,
@@ -34,36 +59,61 @@ export default function Board() {
     if (!targetSquare) return false;
 
     try {
+      // Try to make the user's move
       chess.move({
         from: sourceSquare,
         to: targetSquare,
-        promotion: "q", // siempre promocionar a reina
+        promotion: "q", // always promote to queen
       });
 
-      setChessPosition(chess.fen());
+      setChessPosition(chess.fen()); // update board position
 
-      // hacer el movimiento aleatorio después de un corto retraso
-      setTimeout(makeRandomMove, 500);
+      // Let the engine respond after a short delay
+      setTimeout(makeBestMove, 500);
 
-      return true;
+      return true; // move was successful
     } catch {
-      return false;
+      return false; // move was invalid
     }
   };
 
-  // opciones del tablero
+  // Chessboard configuration options
   const chessboardOptions = {
     animationDurationInMs: animationDuration,
     position: chessPosition,
     onPieceDrop,
     id: "animation-duration-in-ms",
-    boardWidth: 5,
   };
 
-  // renderizado
+  // Render the board and controls
   return (
-    <div style={{ width: '300px' }}>
-      <Chessboard options={chessboardOptions} />
-    </div>    
+    <div className="flex flex-col items-center gap-4 mt-6">
+      {/* Slider to control animation speed */}
+      <label className="flex items-center gap-4">
+        Animation duration (ms):
+        <input
+          type="range"
+          min="0"
+          max="1000"
+          step="50"
+          value={animationDuration}
+          onChange={(e) => setAnimationDuration(Number(e.target.value))}
+        />
+        {animationDuration}ms
+      </label>
+
+      {/* Chessboard component */}
+      <div style={{ width: 500, height: 500 }}>
+        <Chessboard options={chessboardOptions} />
+      </div>
+
+
+      
+
+      {/* Instructional text */}
+      <p className="text-sm text-gray-500">
+        Play against random moves. Try moving pieces to see the animation effect.
+      </p>
+    </div>
   );
 }
