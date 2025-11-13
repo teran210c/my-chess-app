@@ -8,6 +8,9 @@ export default function Board({ initialPosition = "startpos" }: { initialPositio
   // Create a persistent instance of the chess game using a ref
   const chessRef = useRef(new Chess(initialPosition === "startpos" ? undefined : initialPosition));
   const chess = chessRef.current;
+  
+  const [winner, setWinner] = useState<string | null>(null);
+
 
   // State to control animation duration and current board position
   const [animationDuration, setAnimationDuration] = useState(300);
@@ -37,7 +40,10 @@ export default function Board({ initialPosition = "startpos" }: { initialPositio
 
   // Function to apply the best move from the engine to the board
   const makeBestMove = async () => {
-    if (chess.isGameOver()) return; // do nothing if the game is over
+    // do nothing if the game is over
+    if (chess.isGameOver()){
+      return
+    } 
 
     const bestMove = await getBestMoveFromAPI(chess.fen());
 
@@ -46,9 +52,11 @@ export default function Board({ initialPosition = "startpos" }: { initialPositio
     try {
       chess.move(bestMove); // apply the move
       setChessPosition(chess.fen()); // update board position
+      checkWinner();
     } catch (error) {
       console.error("Error applying engine move:", error);
     }
+    
   };
 
   // Handle piece drop event from the user
@@ -56,6 +64,7 @@ export default function Board({ initialPosition = "startpos" }: { initialPositio
     sourceSquare,
     targetSquare,
   }: PieceDropHandlerArgs) => {
+    
     if (!targetSquare) return false;
 
     try {
@@ -67,15 +76,32 @@ export default function Board({ initialPosition = "startpos" }: { initialPositio
       });
 
       setChessPosition(chess.fen()); // update board position
-
+      checkWinner();
       // Let the engine respond after a short delay
-      setTimeout(makeBestMove, 500);
+      if (!chess.isGameOver()) {
+        setTimeout(makeBestMove, 500);
+      }
 
       return true; // move was successful
     } catch {
       return false; // move was invalid
     }
   };
+
+  // Check winner function
+
+  const checkWinner = () => {
+  if (!chess.isGameOver()) return;
+
+  if (chess.isCheckmate()) {
+    const loser = chess.turn(); // “w” o “b”
+    const winnerColor = loser === "w" ? "Black" : "White";
+    setWinner(`${winnerColor} wins by checkmate`);
+    return;
+  }
+
+  setWinner("Draw");
+};
 
   // Chessboard configuration options
   const chessboardOptions = {
@@ -111,9 +137,11 @@ export default function Board({ initialPosition = "startpos" }: { initialPositio
       
 
       {/* Instructional text */}
-      <p className="text-sm text-gray-500">
-        Play against random moves. Try moving pieces to see the animation effect.
-      </p>
+      {winner && (
+          <p className="text-lg font-bold text-red-600">
+            {winner}
+          </p>
+        )}
     </div>
   );
 }
