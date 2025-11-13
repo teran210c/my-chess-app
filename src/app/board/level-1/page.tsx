@@ -3,12 +3,11 @@
 import Board from "../../../../Components/Board"
 
 export default function level1() {
-    console.log("Level1 page mounted");
-
+    const fenMate1 = "7k/8/8/8/8/8/8/R6K w - - 0 1"
     return (
         <>
             <p>hello from level 1</p>
-            <Board />
+            <Board initialPosition={fenMate1}/>
         </>
     )
 }

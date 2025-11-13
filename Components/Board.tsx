@@ -4,9 +4,9 @@ import { useRef, useState } from "react";
 import { Chessboard, PieceDropHandlerArgs } from "react-chessboard";
 import { Chess } from "chess.js"; 
 
-export default function Board() {
+export default function Board({ initialPosition = "startpos" }: { initialPosition?: string }) {
   // Create a persistent instance of the chess game using a ref
-  const chessRef = useRef(new Chess());
+  const chessRef = useRef(new Chess(initialPosition === "startpos" ? undefined : initialPosition));
   const chess = chessRef.current;
 
   // State to control animation duration and current board position
