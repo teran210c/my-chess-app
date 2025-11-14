@@ -15,6 +15,8 @@ export default function Board() {
     }
 
     return(
-        <Chessboard options={chessboardOptions} />
+        <div style={{ width: "500px", height: "500px" }}>
+            <Chessboard options={chessboardOptions} />       
+        </div>
     )
 }
