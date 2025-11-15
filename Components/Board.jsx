@@ -3,14 +3,14 @@ import { Chessboard, PieceDropHandlerArgs } from "react-chessboard"
 import { Chess } from "chess.js"
 import { onPieceDrop } from "../utils/chessHandlers"
 
-export default function Board() {
-    const chessGameRef = useRef(new Chess())
+export default function Board(props) {
+    const chessGameRef = useRef(new Chess(props.boardPosition))
     const chessGame = chessGameRef.current
     const[chessPosition, setChessPosition] = useState(chessGame.fen())
 
     const chessboardOptions = {
       position: chessPosition,
-      onPieceDrop: (args) => onPieceDrop(args, chessGame, setChessPosition),
+      onPieceDrop: (args) => onPieceDrop(args, chessGame, setChessPosition, props.setGameStatus, props.setWinner),
       id: 'play-vs-random'
     }
 
