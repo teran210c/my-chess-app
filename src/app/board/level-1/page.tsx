@@ -6,7 +6,7 @@ import Board from "../../../../Components/Board"
 export default function level1() {
     const [gameStatus, setGameStatus] = useState(false)
     const [winner, setWinner] = useState("")
-    const [time, setTime] = useState(0)
+    const [score, setScore] = useState(0)
     const [history, setHistory] = useState([])
     const startTimeRef = useRef(null)
     const endTimeRef = useRef(null)
@@ -21,7 +21,7 @@ export default function level1() {
                 boardPosition={positionMate1} 
                 setGameStatus={setGameStatus} 
                 setWinner={setWinner} 
-                setTime={setTime} 
+                setScore={setScore} 
                 startTimeRef={startTimeRef} 
                 endTimeRef={endTimeRef}
                 setHistory={setHistory}
@@ -29,7 +29,7 @@ export default function level1() {
             />
             {gameStatus && <div style={{position: "absolute", top: "50%", right: "50%", transform: "translate(50%, -50%)", background: "white"}}>
                 <p>{winner}</p>
-                <p>{time}</p>
+                <p>{score}</p>
                 <p>{history.length}</p>
             </div>}
         </div>

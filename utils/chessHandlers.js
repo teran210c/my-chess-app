@@ -29,7 +29,7 @@ export async function onPieceDrop(
     setChessPosition,
     setGameStatus,
     setWinner,
-    setTime,
+    setScore,
     startTimeRef,
     endTimeRef,
     setHistory,
@@ -71,10 +71,10 @@ export async function onPieceDrop(
             setWinner("You win!")
             endTimeRef.current = Date.now()
             const gameTime = (endTimeRef.current - startTimeRef.current) / 1000
-            setTime(prev => prev = gameTime)
             const movesAmount = chessGame.history(({ verbose: true })).length
             setHistory(chessGame.history({ verbose: true }))
-            calculateScore(gameTime, movesAmount, countBestMoves.current)
+            const myScore = calculateScore(gameTime, movesAmount, countBestMoves.current)
+            setScore(prevScore => prevScore = myScore)
             setGameStatus(prev => !prev)
 
             return true
@@ -85,7 +85,7 @@ export async function onPieceDrop(
             setChessPosition, 
             setGameStatus, 
             setWinner, 
-            setTime, 
+            setScore, 
             startTimeRef, 
             endTimeRef
         ), 300);

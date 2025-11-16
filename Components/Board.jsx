@@ -16,7 +16,7 @@ export default function Board(props) {
         setChessPosition, 
         props.setGameStatus, 
         props.setWinner, 
-        props.setTime, 
+        props.setScore, 
         props.startTimeRef, 
         props.endTimeRef,
         props.setHistory,
