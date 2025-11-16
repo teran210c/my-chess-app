@@ -10,8 +10,8 @@ export default function level1() {
     const [history, setHistory] = useState([])
     const startTimeRef = useRef(null)
     const endTimeRef = useRef(null)
-
-
+    const countBestMoves = useRef(0) 
+   
     const positionMate1 = "7k/8/R5K1/8/8/8/8/8 w - - 0 1"
    
     return (
@@ -25,6 +25,7 @@ export default function level1() {
                 startTimeRef={startTimeRef} 
                 endTimeRef={endTimeRef}
                 setHistory={setHistory}
+                countBestMoves={countBestMoves}
             />
             {gameStatus && <div style={{position: "absolute", top: "50%", right: "50%", transform: "translate(50%, -50%)", background: "white"}}>
                 <p>{winner} {time}</p>
