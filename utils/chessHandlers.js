@@ -47,32 +47,31 @@ export async function onPieceDrop(
         
         setChessPosition(chessGame.fen());
 
-        
-        console.log(userMove)
         const userBestMove = await getBestMove(prevFen);
       
-        console.log(userBestMove)
         if (userMove === userBestMove) {
-            console.log(true)
+           
             countBestMoves.current = countBestMoves.current += 1
-        } else {
-            console.log(false)
-        }
-
+        } 
 
         if (startTimeRef.current === null) {
             startTimeRef.current = Date.now()
         }
 
-        // console.log(chessGame.history({ verbose: true }))
+        
 
         if (chessGame.isGameOver()) {
             setWinner("You win!")
+
             endTimeRef.current = Date.now()
             const gameTime = (endTimeRef.current - startTimeRef.current) / 1000
+
             const movesAmount = chessGame.history(({ verbose: true })).length
+
             const myScore = calculateScore(gameTime, movesAmount, countBestMoves.current)
+
             setScore(prevScore => prevScore = myScore)
+
             setGameStatus(prev => !prev)
 
             return true
