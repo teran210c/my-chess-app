@@ -72,7 +72,7 @@ export async function onPieceDrop(
             endTimeRef.current = Date.now()
             const gameTime = (endTimeRef.current - startTimeRef.current) / 1000
             setTime(prev => prev = gameTime)
-            const movesAmount = chessGame.history(({ verbose: true }).length)
+            const movesAmount = chessGame.history(({ verbose: true })).length
             setHistory(chessGame.history({ verbose: true }))
             calculateScore(gameTime, movesAmount, countBestMoves.current)
             setGameStatus(prev => !prev)
