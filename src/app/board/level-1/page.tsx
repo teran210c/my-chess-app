@@ -28,7 +28,8 @@ export default function level1() {
                 countBestMoves={countBestMoves}
             />
             {gameStatus && <div style={{position: "absolute", top: "50%", right: "50%", transform: "translate(50%, -50%)", background: "white"}}>
-                <p>{winner} {time}</p>
+                <p>{winner}</p>
+                <p>{time}</p>
                 <p>{history.length}</p>
             </div>}
         </div>

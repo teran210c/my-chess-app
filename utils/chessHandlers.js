@@ -55,8 +55,7 @@ export async function onPieceDrop(
         console.log(userBestMove)
         if (userMove === userBestMove) {
             console.log(true)
-            const amoutBestMoves = countBestMoves.current = countBestMoves.current += 1
-            console.log(amoutBestMoves)
+            countBestMoves.current = countBestMoves.current += 1
         } else {
             console.log(false)
         }
@@ -75,7 +74,7 @@ export async function onPieceDrop(
             setTime(prev => prev = gameTime)
             const movesAmount = chessGame.history(({ verbose: true }).length)
             setHistory(chessGame.history({ verbose: true }))
-            calculateScore(gameTime, movesAmount, amoutBestMoves)
+            calculateScore(gameTime, movesAmount, countBestMoves.current)
             setGameStatus(prev => !prev)
 
             return true
