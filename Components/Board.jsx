@@ -19,7 +19,6 @@ export default function Board(props) {
         props.setScore, 
         props.startTimeRef, 
         props.endTimeRef,
-        props.setHistory,
         props.countBestMoves
     ),
       id: 'play-vs-random'

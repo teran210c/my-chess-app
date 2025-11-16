@@ -7,7 +7,6 @@ export default function level1() {
     const [gameStatus, setGameStatus] = useState(false)
     const [winner, setWinner] = useState("")
     const [score, setScore] = useState(0)
-    const [history, setHistory] = useState([])
     const startTimeRef = useRef(null)
     const endTimeRef = useRef(null)
     const countBestMoves = useRef(0) 
@@ -24,13 +23,11 @@ export default function level1() {
                 setScore={setScore} 
                 startTimeRef={startTimeRef} 
                 endTimeRef={endTimeRef}
-                setHistory={setHistory}
                 countBestMoves={countBestMoves}
             />
             {gameStatus && <div style={{position: "absolute", top: "50%", right: "50%", transform: "translate(50%, -50%)", background: "white"}}>
                 <p>{winner}</p>
                 <p>{score}</p>
-                <p>{history.length}</p>
             </div>}
         </div>
     )
