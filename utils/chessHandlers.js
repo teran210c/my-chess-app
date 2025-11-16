@@ -1,7 +1,9 @@
+import { useState, useRef } from "react";
 import { getBestMove } from "../services/stockfishApi";
 import { Chess } from "chess.js"
 
-export async function makeBestMove(chessGame, setChessPosition, setGameStatus, setWinner) {
+export async function makeBestMove(chessGame, setChessPosition, setGameStatus, setWinner, setTime, startTimeRef, endTimeRef) {
+
   const bestMove = await getBestMove(chessGame.fen());
   if (!bestMove) return;
 
@@ -11,7 +13,9 @@ export async function makeBestMove(chessGame, setChessPosition, setGameStatus, s
     setChessPosition(chessGame.fen());
 
     if (chessGame.isGameOver()) {
-        setWinner("PYou lose :(")
+        setWinner("You lose :(")
+        endTimeRef.current = Date.now()
+        setTime(prev => prev = Math.trunc((endTimeRef.current - startTimeRef.current)/1000))
         setGameStatus(prev => !prev)
         return true
     }
@@ -20,7 +24,8 @@ export async function makeBestMove(chessGame, setChessPosition, setGameStatus, s
   }
 }
 
-export function onPieceDrop({ sourceSquare, targetSquare }, chessGame, setChessPosition, setGameStatus, setWinner) {
+export function onPieceDrop({ sourceSquare, targetSquare }, chessGame, setChessPosition, setGameStatus, setWinner, setTime, startTimeRef, endTimeRef) {
+    
   if (!targetSquare) return false;
 
   try {
@@ -30,15 +35,22 @@ export function onPieceDrop({ sourceSquare, targetSquare }, chessGame, setChessP
       promotion: "q",
     });
 
+    
     setChessPosition(chessGame.fen());
+
+        if(startTimeRef.current === null) {
+            startTimeRef.current = Date.now()
+        }
 
     if (chessGame.isGameOver()) {
         setWinner("You win!")
+        endTimeRef.current = Date.now()
+        setTime(prev => prev = Math.trunc((endTimeRef.current - startTimeRef.current)/1000))
         setGameStatus(prev => !prev)
         return true
     }
 
-    setTimeout(() => makeBestMove(chessGame, setChessPosition, setGameStatus, setWinner), 300);
+    setTimeout(() => makeBestMove(chessGame, setChessPosition, setGameStatus, setWinner, setTime, startTimeRef, endTimeRef), 300);
     return true; 
   } catch {
     return false;

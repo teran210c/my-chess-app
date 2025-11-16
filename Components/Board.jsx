@@ -10,7 +10,7 @@ export default function Board(props) {
 
     const chessboardOptions = {
       position: chessPosition,
-      onPieceDrop: (args) => onPieceDrop(args, chessGame, setChessPosition, props.setGameStatus, props.setWinner),
+      onPieceDrop: (args) => onPieceDrop(args, chessGame, setChessPosition, props.setGameStatus, props.setWinner, props.setTime, props.startTimeRef, props.endTimeRef),
       id: 'play-vs-random'
     }
 
