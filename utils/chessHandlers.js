@@ -24,7 +24,17 @@ export async function makeBestMove(chessGame, setChessPosition, setGameStatus, s
   }
 }
 
-export function onPieceDrop({ sourceSquare, targetSquare }, chessGame, setChessPosition, setGameStatus, setWinner, setTime, startTimeRef, endTimeRef) {
+export function onPieceDrop(
+    { sourceSquare, targetSquare }, 
+    chessGame, 
+    setChessPosition, 
+    setGameStatus, 
+    setWinner, 
+    setTime, 
+    startTimeRef, 
+    endTimeRef,
+    setHistory
+) {
     
   if (!targetSquare) return false;
 
@@ -38,15 +48,19 @@ export function onPieceDrop({ sourceSquare, targetSquare }, chessGame, setChessP
     
     setChessPosition(chessGame.fen());
 
-        if(startTimeRef.current === null) {
-            startTimeRef.current = Date.now()
-        }
+     if(startTimeRef.current === null) {
+        startTimeRef.current = Date.now()
+    }
+
+    console.log(chessGame.history({verbose: true}))
 
     if (chessGame.isGameOver()) {
         setWinner("You win!")
         endTimeRef.current = Date.now()
         setTime(prev => prev = Math.trunc((endTimeRef.current - startTimeRef.current)/1000))
+        setHistory(chessGame.history({verbose: true}))
         setGameStatus(prev => !prev)
+
         return true
     }
 
