@@ -1,32 +1,33 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Chessboard, PieceDropHandlerArgs } from "react-chessboard"
 import { Chess } from "chess.js"
 import { onPieceDrop } from "../utils/chessHandlers"
 
 export default function Board(props) {
-    const chessGameRef = useRef(new Chess(props.boardPosition))
-    const chessGame = chessGameRef.current
-    const[chessPosition, setChessPosition] = useState(chessGame.fen())
 
-    const chessboardOptions = {
-      position: chessPosition,
-      onPieceDrop: (args) => onPieceDrop(
-        args, 
-        chessGame, 
-        setChessPosition, 
-        props.setGameStatus, 
-        props.setWinner, 
-        props.setScore, 
-        props.startTimeRef, 
-        props.endTimeRef,
-        props.countBestMoves
+  const chessGameRef = useRef(new Chess(props.boardPosition))
+  const chessGame = chessGameRef.current
+  const [chessPosition, setChessPosition] = useState(chessGame.fen())
+
+  const chessboardOptions = {
+    position: chessPosition,
+    onPieceDrop: (args) => onPieceDrop(
+      args,
+      chessGame,
+      setChessPosition,
+      props.setGameStatus,
+      props.setWinner,
+      props.setScore,
+      props.startTimeRef,
+      props.endTimeRef,
+      props.countBestMoves
     ),
-      id: 'play-vs-random'
-    }
+    id: 'play-vs-random'
+  }
 
-    return(
-        <div style={{ width: "500px", height: "500px" }}>
-            <Chessboard options={chessboardOptions} />       
-        </div>
-    )
+  return (
+    <div style={{ width: "500px", height: "500px" }}>
+      <Chessboard options={chessboardOptions} />
+    </div>
+  )
 }
