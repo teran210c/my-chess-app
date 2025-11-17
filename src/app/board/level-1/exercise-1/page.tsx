@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useRef } from "react";
-import Board from "../../../../Components/Board"
+import { useState, useRef } from "react"
+import { useRouter } from "next/navigation"
+import Board from "../../../../../Components/Board"
 
 export default function level1() {
     const [gameStatus, setGameStatus] = useState(false)
@@ -10,6 +11,7 @@ export default function level1() {
     const startTimeRef = useRef(null)
     const endTimeRef = useRef(null)
     const countBestMoves = useRef(0) 
+    const router = useRouter();
    
     const positionMate1 = "7k/8/R5K1/8/8/8/8/8 w - - 0 1"
    
@@ -28,6 +30,7 @@ export default function level1() {
             {gameStatus && <div style={{position: "absolute", top: "50%", right: "50%", transform: "translate(50%, -50%)", background: "white"}}>
                 <p>{winner}</p>
                 <p>{score}</p>
+                <button onClick={() => router.push(`/board/level-1/exercise-2`)}>Continue</button>
             </div>}
         </div>
     )

@@ -14,7 +14,7 @@ export default function Path() {
             <p>Path component</p>
             {levels.map(level => (
                level.unlocked && <p key={level.id}
-               onClick={() => router.push(`board/level-${level.id}`)}
+               onClick={() => router.push(`board/level-${level.id}/exercise-1`)}
                >
                 {level.id}
                 </p>
