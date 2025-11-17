@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
-import Board from "../../../../../Components/Board"
+import Board from "../../../../Components/Board"
 
 export default function level1() {
     const [gameStatus, setGameStatus] = useState(false)
